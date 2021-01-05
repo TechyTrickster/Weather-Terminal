@@ -6,4 +6,4 @@ example usage
 
 NOTE: the city and the State abriviation must be seperated by a space!
 
-There are two arguments, the city name, and State abriviation.  They must be spelled correctly
+There are two arguments, the city name, and State abriviation.  They must be spelled correctly, and the state abriviation must be all caps.
