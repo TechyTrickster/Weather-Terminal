@@ -5,3 +5,5 @@ example usage
 > ./getWeather.sh Chicago IL
 
 NOTE: the city and the State abriviation must be seperated by a space!
+
+There are two arguments, the city name, and State abriviation.  They must be spelled correctly
