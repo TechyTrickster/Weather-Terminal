@@ -14,14 +14,14 @@ WindSpeedRaw="$(grep -A1 "Wind Speed" $inputPage | sed '1d')"
 BarometerRaw="$(grep -A1 "Barometer" $inputPage | sed '1d')"
 DewPointRaw="$(grep -A1 "Dewpoint" $inputPage | sed '1d')"
 TemperatureRaw="$(grep "myforecast-current-sm" $inputPage)"
-SkyRaw="$(grep "myforecast-current.>" $inputPage)"
+SkyRaw="$(grep "myforecast-current.>" $inputPage) in $1, $2"
 TimeRaw="$(grep -A2 "Last update" $inputPage | sed '1,2d')"
 
 
 #format raw string and output them to the user
 echo "Weather Report As Of" | toilet -f pagga
 echo "$TimeRaw" | sed -e 's/^[[:space:]]*//g' | sed 's/\<td\>//g' | tr -d '<>/' | sed -e 's/[[:space:]]*$//g' | toilet -f pagga
-echo "$SkyRaw" | sed -e 's/^[[:space:]]*//g' | sed 's/.*current//g' | tr -d '<>/p\"' | toilet -f pagga
+echo "$SkyRaw" | sed -e 's/^[[:space:]]*//g' | sed 's/.*current//g' | tr -d '<>/p\"' | toilet -w 100 -f pagga
 echo "Humidity:    " | tr -d '\n'
 echo "$HumidityRaw" | sed -e 's/^[[:space:]]*//g' | tr -d 'td<>/'
 echo "Wind Speed:  " | tr -d '\n'
@@ -44,4 +44,4 @@ toilet "Detailed Forecast" -f pagga
 grep -o "title=.*\" " $inputPage | sed '1d' | sed 's/title.//g' | sed '10,$d' | tr -d '\"'
 
 #clean up when we are done
-#rm $inputPage
+rm $inputPage
