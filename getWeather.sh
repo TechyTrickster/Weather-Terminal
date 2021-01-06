@@ -7,6 +7,7 @@ searchQuery="https://forecast.weather.gov/MapClick.php?CityName=$City&state=$Sta
 inputPage="temp.http"
 wget -q "$searchQuery" -O $inputPage
 
+seperator="$(yes '-' | head -n 120 | tr -d '\n')"
 HumidityRaw="$(grep -A1 "Humidity" $inputPage | sed '1d')"
 VisibilityRaw="$(grep -A1 "Visibility" $inputPage | sed '1d')"
 WindChillRaw="$(grep "Wind Chill" $inputPage)"
@@ -41,7 +42,21 @@ echo "$DewPointRaw" | sed -e 's/^[[:space:]]*//g' | sed 's/.*F//g' | sed -e 's/^
 echo
 echo
 toilet "Detailed Forecast" -f pagga
-grep -o "title=.*\" " $inputPage | sed '1d' | sed 's/title.//g' | sed '10,$d' | tr -d '\"'
+forecastWhole="$(grep -o "title=.*\" " $inputPage | sed '1d' | sed 's/title.//g' | sed '10,$d' | tr -d '\"')"
+
+
+for i in {1..9}
+do
+	period="p$i.txt"
+	description="d$i.txt"
+	sedLine="$(echo "$i p" | tr -d ' ')"
+	echo "$forecastWhole" | sed -n "$sedLine" | grep -o ".*:" | toilet -f future > $period
+	echo "$forecastWhole" | sed -n "$sedLine" | sed 's/.*://g' | fold -s -w 80 > $description
+	paste $period $description | column -s $'\t' -t
+	echo "$seperator"
+	rm $period $description
+done
+
 
 #clean up when we are done
 rm $inputPage
