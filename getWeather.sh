@@ -3,13 +3,20 @@
 #process input and retrieve national weather service page for the given location
 City="$(echo "$1" | tr ' ' '+')"
 State=$2
-width=$(stty -a < $(tty) | grep -Po '(?<=columns )\d+')
 NC='\\033\[0m'
 RED='\\033\[0;31m'
 BLUE='\\033\[0;34m'
 GREEN='\\033\[0;32m'
 YELLOW='\\033\[0;33m'
 CYAN='\\033\[0;36m'
+
+#set message width
+if [ $# -eq 3 ]
+then
+	width=$3
+else
+	width=$(stty -a < $(tty) | grep -Po '(?<=columns )\d+')
+fi
 
 searchQuery="https://forecast.weather.gov/MapClick.php?CityName=$City&state=$State"
 inputPage="temp.http"
