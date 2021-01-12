@@ -61,10 +61,16 @@ do
 	echo "$forecastWhole" | sed -n "$sedLine" | grep -o ".*:" | toilet -f future > $period
 	length=$(wc -L $period | sed 's/ .*//g')
 	let "size = width - length - 1"
-	echo "$forecastWhole" | sed -n "$sedLine" | sed 's/.*://g' | fold -s -w $size > $description
-	paste $period $description | column -s $'\t' -t
+	description0=$(echo "$forecastWhole" | sed -n "$sedLine" | sed 's/.*://g' | sed 's/\%/ percent/g' | fold -s -w $size)
+	description1=$(echo "$description0" | sed -E -e "s/(sunny)/$YELLOW:\1$NC/g" | tr -d ":")
+	description2=$(echo "$description1" | sed -E -e "s/(rain|snow)/$CYAN:\1$NC/g" | tr -d ":")
+	description3=$(echo "$description2" | sed -E -e "s/(hot|warm)/$RED:\1$NC/g" | tr -d ":")
+	description4=$(echo "$description3" | sed -E -e "s/(cold|cool|chilly)/$BLUE:\1$NC/g" | tr -d ":")
+	echo "$description4" | sed -E -e "s/(gusts|wind|cloudy)/$GREEN:\1$NC/g" | tr -d ":" > $description
+	output=$(paste $period $description | column -s $'\t' -t)
+	printf "$output\n"
 	echo "$seperatorA"
-	rm $period $description
+	#rm $period $description
 done
 
 
