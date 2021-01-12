@@ -3,7 +3,7 @@
 #process input and retrieve national weather service page for the given location
 City="$(echo "$1" | tr ' ' '+')"
 State=$2
-width=110
+width=$(stty -a < $(tty) | grep -Po '(?<=columns )\d+')
 NC='\\033\[0m'
 RED='\\033\[0;31m'
 BLUE='\\033\[0;34m'
