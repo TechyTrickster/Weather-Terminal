@@ -70,7 +70,7 @@ do
 	output=$(paste $period $description | tr '\t' ' ')
 	printf "$output\n"
 	echo "$seperatorA"
-	#rm $period $description
+	rm $period $description
 done
 
 
