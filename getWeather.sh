@@ -67,7 +67,7 @@ do
 	description3=$(echo "$description2" | sed -E -e "s/(hot|warm)/$RED:\1$NC/g" | tr -d ":")
 	description4=$(echo "$description3" | sed -E -e "s/(cold|cool|chilly)/$BLUE:\1$NC/g" | tr -d ":")
 	echo "$description4" | sed -E -e "s/(gusts|wind|cloudy)/$GREEN:\1$NC/g" | tr -d ":" > $description
-	output=$(paste $period $description | column -s $'\t' -t)
+	output=$(paste $period $description | tr '\t' ' ')
 	printf "$output\n"
 	echo "$seperatorA"
 	#rm $period $description
