@@ -15,6 +15,7 @@ searchQuery="https://forecast.weather.gov/MapClick.php?CityName=$City&state=$Sta
 inputPage="temp.http"
 wget -q "$searchQuery" -O $inputPage
 
+#extract weather variables from the webpage source
 seperatorA="$(yes '-' | head -n $width | tr -d '\n')"
 seperatorB="$(yes '=' | head -n $width | tr -d '\n')"
 HumidityRaw="$(grep -A1 "Humidity" $inputPage | sed '1d')"
@@ -53,7 +54,7 @@ toilet "Detailed Forecast" -f pagga
 forecastWhole="$(grep -o "title=.*\" " $inputPage | sed '1d' | sed 's/title.//g' | sed '10,$d' | tr -d '\"')"
 echo "$seperatorB"
 
-for i in {1..9}
+for i in {1..9} #each iteration processes and prints out one time periods forecast.
 do
 	period="p$i.txt"
 	description="d$i.txt"
