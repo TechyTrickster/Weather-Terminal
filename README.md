@@ -2,6 +2,8 @@
 A small bash script that will grab the current weather conditions and a 5 day forecast from the US National Weather Service.
 I am fairly certain this will only work on US locations.  Has color highlighting for the detailed forecast!
 
+Provide a number at the end to indicate a fixed message width, otherwise, the message will be as wide as the current terminal.
+
 example usage
 > ./getWeather.sh Chicago IL
 
