@@ -27,7 +27,7 @@ seperatorA="$(yes '-' | head -n $width | tr -d '\n')"
 seperatorB="$(yes '=' | head -n $width | tr -d '\n')"
 HumidityRaw="$(grep -A1 "Humidity" $inputPage | sed '1d')"
 VisibilityRaw="$(grep -A1 "Visibility" $inputPage | sed '1d')"
-WindChillRaw="$(grep "Wind Chill" $inputPage)"
+WindChillRaw="$(grep "<b>Wind Chill" $inputPage)"
 WindSpeedRaw="$(grep -A1 "Wind Speed" $inputPage | sed '1d')"
 BarometerRaw="$(grep -A1 "Barometer" $inputPage | sed '1d')"
 DewPointRaw="$(grep -A1 "Dewpoint" $inputPage | sed '1d')"
@@ -83,4 +83,4 @@ done
 
 
 #clean up when we are done
-rm $inputPage
+#rm $inputPage
