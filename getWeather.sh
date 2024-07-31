@@ -19,7 +19,7 @@ else
 fi
 
 searchQuery="https://forecast.weather.gov/MapClick.php?CityName=$City&state=$State"
-inputPage="temp.http"
+inputPage="temp.html"
 wget -q "$searchQuery" -O $inputPage
 
 #extract weather variables from the webpage source
@@ -58,7 +58,7 @@ echo "$DewPointRaw" | sed -e 's/^[[:space:]]*//g' | sed 's/.*F//g' | sed -e 's/^
 echo
 echo
 toilet "Detailed Forecast" -f pagga
-forecastWhole="$(grep -o "title=.*\" " $inputPage | sed '1d' | sed 's/title.//g' | sed '10,$d' | tr -d '\"')"
+forecastWhole="$(cat $inputPage | tr '\n' ' ' | grep -o "detailed-forecast-body.*" | grep -o ".*<\!-- /Detailed Forecast" | sed 's/row row-odd row-forecast\|row row-even row-forecast/\n/g' | sed '1d' | tr -d '\"')"
 echo "$seperatorB"
 
 for i in {1..9} #each iteration processes and prints out one time periods forecast.
@@ -66,10 +66,10 @@ do
 	period="p$i.txt"
 	description="d$i.txt"
 	sedLine="$(echo "$i p" | tr -d ' ')"
-	echo "$forecastWhole" | sed -n "$sedLine" | grep -o ".*:" | toilet -f future > $period
+	echo "$forecastWhole" | sed -n "$sedLine" | grep -o "<b>[a-zA-Z ]*" | sed -n '1p' | sed 's/<b>//g' | toilet -f future > $period
 	length=$(wc -L $period | sed 's/ .*//g')
 	let "size = width - length - 1"
-	description0=$(echo "$forecastWhole" | sed -n "$sedLine" | sed 's/.*://g' | sed 's/\%/ percent/g' | fold -s -w $size)
+	description0=$(echo "$forecastWhole" | sed -n "$sedLine" | sed 's/.*col-sm-10 forecast-text>//g' | sed 's/<.*//g' | sed 's/\%/ percent/g' | fold -s -w $size)
 	description1=$(echo "$description0" | sed -E -e "s/(sunny)/$YELLOW:\1$NC/g" | tr -d ":")
 	description2=$(echo "$description1" | sed -E -e "s/(rain|snow)/$CYAN:\1$NC/g" | tr -d ":")
 	description3=$(echo "$description2" | sed -E -e "s/(hot|warm)/$RED:\1$NC/g" | tr -d ":")
@@ -83,4 +83,4 @@ done
 
 
 #clean up when we are done
-#rm $inputPage
+rm $inputPage
