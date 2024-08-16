@@ -71,7 +71,7 @@ do
 	let "size = width - length - 1"
 	description0=$(echo "$forecastWhole" | sed -n "$sedLine" | sed 's/.*col-sm-10 forecast-text>//g' | sed 's/<.*//g' | sed 's/\%/ percent/g' | fold -s -w $size)
 	description1=$(echo "$description0" | sed -E -e "s/(sunny)/$YELLOW:\1$NC/g" | tr -d ":")
-	description2=$(echo "$description1" | sed -E -e "s/(rain|snow)/$CYAN:\1$NC/g" | tr -d ":")
+	description2=$(echo "$description1" | sed -E -e "s/(rain|snow|rainfall)/$CYAN:\1$NC/g" | tr -d ":")
 	description3=$(echo "$description2" | sed -E -e "s/(hot|warm)/$RED:\1$NC/g" | tr -d ":")
 	description4=$(echo "$description3" | sed -E -e "s/(cold|cool|chilly)/$BLUE:\1$NC/g" | tr -d ":")
 	echo "$description4" | sed -E -e "s/(gusts|wind|cloudy)/$GREEN:\1$NC/g" | tr -d ":" > $description
